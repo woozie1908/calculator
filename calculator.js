@@ -14,21 +14,34 @@ var multiply = function (a, b) {
 var divide = function (a, b) {
     return a / b;
 };
-var resultAdd = divide(8, 8);
-console.log(resultAdd);
-//Answer Box -> Playing around 
-var answerBox = document.createElement('div');
-answerBox.classList.add('box');
-answerBox.placeholder = 'Enter answer here';
-answerBox.classList.add('box');
-answerBox.style.width = '300px';
-answerBox.style.height = '60px';
-answerBox.style.border = '2px solid black';
-answerBox.style.position = 'absolute';
-answerBox.style.left = '50%';
-answerBox.style.top = '7%';
-answerBox.style.transform = 'translate(-50%, -50%)';
-document.body.appendChild(answerBox);
+//Operator function
+var operate = function (operator, a, b) {
+    if (operator === '+') {
+        return add(a, b);
+    }
+    else if (operator === '-') {
+        return subtract(a, b);
+    }
+    else if (operator === '*') {
+        return multiply(a, b);
+    }
+    else if (operator === '/') {
+        return divide(a, b);
+    }
+};
+console.log(operate('+', 5, 3));
+// //Answer Box -> Playing around 
+// const answerBox = document.createElement('div');
+// answerBox.placeholder = 'Enter answer here';
+// answerBox.classList.add('box');
+// answerBox.style.width = '300px';
+// answerBox.style.height = '60px';
+// answerBox.style.border = '2px solid black';
+// answerBox.style.position = 'absolute';
+// answerBox.style.left = '50%';
+// answerBox.style.top = '7%';
+// answerBox.style.transform = 'translate(-50%, -50%)';
+// document.body.appendChild(answerBox);
 // //Establish Input Response
 // const input1 = document.createElement("input");
 // input1.type = "number";

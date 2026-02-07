@@ -5,56 +5,89 @@ const add = function(a: number, b: number): number {
     return a + b;
 };
 
-const resultAdd = add(8, 8);
-console.log(resultAdd);
+//Subtract function
+const subtract = function(a: number, b: number): number {
+  return a - b;
+}
 
-// the following items and testing them in your browser’s console:
-// add
-// subtract
-// multiply
-// divide
+//Multiply function
+const multiply = function(a: number, b: number): number {
+  return a * b;
+}
 
-//Answer Box
-const answerBox = document.createElement('div');
-answerBox.classList.add('box');
-answerBox.placeholder = 'Enter answer here';
-answerBox.classList.add('box');
-answerBox.style.width = '300px';
-answerBox.style.height = '60px';
-answerBox.style.border = '2px solid black';
-answerBox.style.position = 'absolute';
-answerBox.style.left = '50%';
-answerBox.style.top = '7%';
-answerBox.style.transform = 'translate(-50%, -50%)';
+//Divide function
+const divide = function(a: number, b: number): number {
+  return a / b;
+}
 
-//Establish Input Response
-const input1 = document.createElement("input");
-input1.type = "number";
-input1.placeholder = "First number";
+//Operator function
+const operate = function(operator: string, a: number, b: number) {
+  if (operator === '+') {
+    return add(a,b);
+  } else if (operator === '-') {
+    return subtract(a,b);
+  } else if (operator === '*') {
+    return multiply(a,b);
+  } else if (operator === '/') {
+    return divide(a,b);
+  }
+};
 
-const input2 = document.createElement("input");
-input2.type = "number";
-input2.placeholder = "Second number";
+console.log(operate('+', 5, 3));
 
-const button = document.createElement("button");
-button.textContent = "Add";
 
-const result = document.createElement("input");
-result.type = "text";
-result.placeholder = "Result";
-result.readOnly = true;
 
-button.addEventListener("click", () => {
-    const a = Number(input1.value);
-    const b = Number(input2.value);
+
+
+
+
+
+
+
+// //Answer Box -> Playing around 
+// const answerBox = document.createElement('div');
+// answerBox.placeholder = 'Enter answer here';
+// answerBox.classList.add('box');
+// answerBox.style.width = '300px';
+// answerBox.style.height = '60px';
+// answerBox.style.border = '2px solid black';
+// answerBox.style.position = 'absolute';
+// answerBox.style.left = '50%';
+// answerBox.style.top = '7%';
+// answerBox.style.transform = 'translate(-50%, -50%)';
+
+// document.body.appendChild(answerBox);
+
+
+
+
+
+// //Establish Input Response
+// const input1 = document.createElement("input");
+// input1.type = "number";
+// input1.placeholder = "First number";
+
+// const input2 = document.createElement("input");
+// input2.type = "number";
+// input2.placeholder = "Second number";
+
+// const button = document.createElement("button");
+// button.textContent = "Add";
+
+// const result = document.createElement("input");
+// result.type = "text";
+// result.placeholder = "Result";
+// result.readOnly = true;
+
+// button.addEventListener("click", () => {
+//     const a = Number(input1.value);
+//     const b = Number(input2.value);
   
-    result.value = add(a, b);
-  });
-  
+//     result.value = add(a, b);
+//   });
 
-
-document.body.appendChild(answerBox);
-answerBox.appendChild(input1);
-answerBox.appendChild(input2);
-answerBox.appendChild(button);
-answerBox.appendChild(result);
+// document.body.appendChild(answerBox);
+// answerBox.appendChild(input1);
+// answerBox.appendChild(input2);
+// answerBox.appendChild(button);
+// answerBox.appendChild(result);
