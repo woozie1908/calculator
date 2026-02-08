@@ -29,7 +29,48 @@ var operate = function (operator, a, b) {
         return divide(a, b);
     }
 };
-console.log(operate('+', 5, 3));
+console.log(operate('+', 3, 1));
+//Establish functions to update number varibles with buttons clicked
+var result = document.querySelector("#display");
+var numberButtons = document.querySelectorAll(".number");
+numberButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+        var currentValue = result.value;
+        var buttonNumber = button.textContent;
+        result.value = currentValue + buttonNumber;
+    });
+});
+var symbolButtons = document.querySelectorAll(".symbol");
+symbolButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+        var currentValue = result.value;
+        var buttonSymbol = button.textContent;
+        result.value = currentValue + buttonSymbol;
+    });
+});
+// //Establish Input Response
+// const input1 = document.createElement("input");
+// input1.type = "number";
+// input1.placeholder = "First number";
+// const input2 = document.createElement("input");
+// input2.type = "number";
+// input2.placeholder = "Second number";
+// const button = document.createElement("button");
+// button.textContent = "Add";
+// const result = document.createElement("input");
+// result.type = "text";
+// result.placeholder = "Result";
+// result.readOnly = true;
+// button.addEventListener("click", () => {
+//     const a = Number(input1.value);
+//     const b = Number(input2.value);
+//     result.value = add(a, b);
+//   });
+// document.body.appendChild(answerBox);
+// answerBox.appendChild(input1);
+// answerBox.appendChild(input2);
+// answerBox.appendChild(button);
+// answerBox.appendChild(result);
 // //Answer Box -> Playing around 
 // const answerBox = document.createElement('div');
 // answerBox.placeholder = 'Enter answer here';

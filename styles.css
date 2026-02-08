@@ -3,3 +3,9 @@
     font-weight: bold;
     font-size: xx-large;
 }
+
+#display{
+    border: 1px solid black;
+    display: block;
+    margin: 20px auto;
+}
