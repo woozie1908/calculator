@@ -22,48 +22,62 @@ var operate = function (operator, a, b) {
     else if (operator === '-') {
         return subtract(a, b);
     }
-    else if (operator === '*') {
+    else if (operator === 'x') {
         return multiply(a, b);
     }
-    else if (operator === '/') {
+    else if (operator === '÷') {
         return divide(a, b);
     }
 };
 console.log(operate('+', 3, 1));
-//Establish functions to update number varibles with buttons clicked
-var result = document.querySelector("#display");
+//Establish functions to update number and symbol varibles with buttons clicked
+var display = document.querySelector("#display");
+;
 var numberButtons = document.querySelectorAll(".number");
 numberButtons.forEach(function (button) {
     button.addEventListener("click", function () {
-        var currentValue = result.value;
+        var currentValue = display.value;
         var buttonNumber = button.textContent;
-        result.value = currentValue + buttonNumber;
+        display.value = currentValue + buttonNumber;
+        display.readOnly = true;
     });
 });
 var symbolButtons = document.querySelectorAll(".symbol");
 symbolButtons.forEach(function (button) {
     button.addEventListener("click", function () {
-        var currentValue = result.value;
+        var currentValue = display.value;
         var buttonSymbol = button.textContent;
-        result.value = currentValue + buttonSymbol;
+        display.value = currentValue + buttonSymbol;
+        display.readOnly = true;
     });
 });
-// //Establish Input Response
-// const input1 = document.createElement("input");
-// input1.type = "number";
-// input1.placeholder = "First number";
-// const input2 = document.createElement("input");
-// input2.type = "number";
-// input2.placeholder = "Second number";
-// const button = document.createElement("button");
-// button.textContent = "Add";
-// const result = document.createElement("input");
-// result.type = "text";
-// result.placeholder = "Result";
-// result.readOnly = true;
+//Reset button
+var clear = document.querySelector(".clear");
+clear.addEventListener("click", function () {
+    display.value = '';
+});
+// //Call operate and find result of numbers
+var equals = document.querySelector(".result");
+equals.addEventListener("click", function () {
+    var expression = display.value;
+    var operator = "";
+    if (expression.includes("+"))
+        operator = "+";
+    else if (expression.includes("-"))
+        operator = "-";
+    else if (expression.includes("x"))
+        operator = "x";
+    else if (expression.includes("÷"))
+        operator = "÷";
+    var parts = expression.split(operator);
+    var a = Number(parts[0]);
+    var b = Number(parts[1]);
+    var result = operate(operator, a, b);
+    display.value = String(result);
+});
 // button.addEventListener("click", () => {
-//     const a = Number(input1.value);
-//     const b = Number(input2.value);
+// const a = Number(input1.value);
+// const b = Number(input2.value);
 //     result.value = add(a, b);
 //   });
 // document.body.appendChild(answerBox);

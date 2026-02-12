@@ -1,5 +1,3 @@
-
-
 //Addition function
 const add = function(a: number, b: number): number {
     return a + b;
@@ -26,57 +24,79 @@ const operate = function(operator: string, a: number, b: number) {
     return add(a,b);
   } else if (operator === '-') {
     return subtract(a,b);
-  } else if (operator === '*') {
+  } else if (operator === 'x') {
     return multiply(a,b);
-  } else if (operator === '/') {
+  } else if (operator === '÷') {
     return divide(a,b);
   }
 };
 
 console.log(operate('+', 3, 1));
 
-//Establish functions to update number varibles with buttons clicked
-const result = document.querySelector("#display");
+//Establish functions to update number and symbol varibles with buttons clicked
+const display = document.querySelector("#display") as HTMLInputElement;;
 
 const numberButtons = document.querySelectorAll(".number");
 numberButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const currentValue = result.value;
+    const currentValue = display.value;
     const buttonNumber = button.textContent;
-    result.value = currentValue + buttonNumber;
+    display.value = currentValue + buttonNumber;
+    display.readOnly = true;
   });
 });
 
 const symbolButtons = document.querySelectorAll(".symbol");
 symbolButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const currentValue = result.value;
+    const currentValue = display.value;
     const buttonSymbol = button.textContent;
-    result.value = currentValue + buttonSymbol;
+    display.value = currentValue + buttonSymbol;
+    display.readOnly = true;
   });
 });
 
+//Reset button
+const clear = document.querySelector(".clear");
+clear.addEventListener("click", () => {
+  display.value = '';
+});
 
-// //Establish Input Response
-// const input1 = document.createElement("input");
-// input1.type = "number";
-// input1.placeholder = "First number";
+// //Call operate and find result of numbers
+const equals = document.querySelector(".result") as HTMLButtonElement;
+equals.addEventListener("click", () => {
+  const expression = display.value;
 
-// const input2 = document.createElement("input");
-// input2.type = "number";
-// input2.placeholder = "Second number";
+  let operator = "";
+  
+  if (expression.includes("+")) operator = "+";
+  else if (expression.includes("-")) operator = "-";
+  else if (expression.includes("x")) operator = "x";
+  else if (expression.includes("÷")) operator = "÷";
+  
+  const parts = expression.split (operator);
+  
+  const a = Number(parts[0]);
+  const b = Number(parts[1]);
+  
+  const result =operate(operator, a, b);
+  
+  display.value = String(result);
+});
 
-// const button = document.createElement("button");
-// button.textContent = "Add";
 
-// const result = document.createElement("input");
-// result.type = "text";
-// result.placeholder = "Result";
-// result.readOnly = true;
+
+
+
+
+
+
+
+
 
 // button.addEventListener("click", () => {
-//     const a = Number(input1.value);
-//     const b = Number(input2.value);
+    // const a = Number(input1.value);
+    // const b = Number(input2.value);
   
 //     result.value = add(a, b);
 //   });
