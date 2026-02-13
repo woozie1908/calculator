@@ -31,66 +31,80 @@ const operate = function(operator: string, a: number, b: number) {
   }
 };
 
-console.log(operate('+', 3, 1));
 
-//Establish functions to update number and symbol varibles with buttons clicked
-const display = document.querySelector("#display") as HTMLInputElement;;
+//Global variables
+let firstNumber = '';
+let operator = '';
 
+
+//Display
+const display = document.querySelector("#display") as HTMLInputElement;
+
+// Number buttons
+// FIX 1: Changed display.value = currentValue + buttonNumber
+// to display.value = display.value + buttonNumber
+// because currentValue was never defined!
 const numberButtons = document.querySelectorAll(".number");
 numberButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const currentValue = display.value;
-    const buttonNumber = button.textContent;
-    display.value = currentValue + buttonNumber;
-    display.readOnly = true;
+    const buttonNumber = button.textContent || '';
+    display.value = display.value + buttonNumber;
   });
 });
 
-const symbolButtons = document.querySelectorAll(".symbol");
+// Symbol buttons
+// FIX 2: Added "as NodeListOf<HTMLButtonElement>" 
+// so TypeScript knows these are buttons!
+// FIX 3: Added "const clickedOperator = button.textContent || ''"
+// because clickedOperator was never defined!
+const symbolButtons = document.querySelectorAll(".symbol") as NodeListOf<HTMLButtonElement>;
 symbolButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const currentValue = display.value;
-    const buttonSymbol = button.textContent;
-    display.value = currentValue + buttonSymbol;
-    display.readOnly = true;
+    
+    // FIX 3: Define clickedOperator at the TOP of the handler
+    const clickedOperator = button.textContent || '';
+
+    if (firstNumber && operator) {
+      // Calculate first, then show result + new operator
+      const result = operate(operator, Number(firstNumber), Number(display.value.split(operator)[1].trim()));
+      firstNumber = String(result);
+      display.value = firstNumber + ' ' + clickedOperator + ' ';
+    } else {
+      // First operator being clicked
+      firstNumber = display.value;
+      display.value = display.value + ' ' + clickedOperator + ' ';
+    }
+
+    // Save which operator was clicked
+    operator = clickedOperator;
   });
 });
 
-//Reset button
-const clear = document.querySelector(".clear");
+// Reset button
+// FIX 4: Added "as HTMLButtonElement"
+// so TypeScript knows this is a button!
+const clear = document.querySelector(".clear") as HTMLButtonElement;
 clear.addEventListener("click", () => {
   display.value = '';
+  firstNumber = '';
+  operator = '';
 });
 
-// //Call operate and find result of numbers
+// Equals button
 const equals = document.querySelector(".result") as HTMLButtonElement;
 equals.addEventListener("click", () => {
-  const expression = display.value;
+  if (firstNumber && operator) {
+    const parts = display.value.split(operator);
+    const secondNumber = parts[1].trim();
 
-  let operator = "";
-  
-  if (expression.includes("+")) operator = "+";
-  else if (expression.includes("-")) operator = "-";
-  else if (expression.includes("x")) operator = "x";
-  else if (expression.includes("÷")) operator = "÷";
-  
-  const parts = expression.split (operator);
-  
-  const a = Number(parts[0]);
-  const b = Number(parts[1]);
-  
-  const result =operate(operator, a, b);
-  
-  display.value = String(result);
+    if (secondNumber) {
+      const result = operate(operator, Number(firstNumber), Number(secondNumber));
+      display.value = String(result);
+      firstNumber = '';
+      operator = '';
+    }
+  }
 });
-
-
-
-
-
-
-
-
 
 
 
