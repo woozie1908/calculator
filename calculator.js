@@ -32,109 +32,113 @@ var operate = function (operator, a, b) {
 //Global variables
 var firstNumber = '';
 var operator = '';
+var resultShown = false;
+// NEW: Tracks if a result was just displayed
+// true = result just shown, next number click starts fresh
+// false = normal typing mode
 //Display
 var display = document.querySelector("#display");
 // Number buttons
-// FIX 1: Changed display.value = currentValue + buttonNumber
-// to display.value = display.value + buttonNumber
-// because currentValue was never defined!
 var numberButtons = document.querySelectorAll(".number");
 numberButtons.forEach(function (button) {
     button.addEventListener("click", function () {
         var buttonNumber = button.textContent || '';
-        display.value = display.value + buttonNumber;
+        if (resultShown) {
+            // NEW: Result was just shown, start fresh!
+            // Clear display and start new number
+            display.value = buttonNumber;
+            firstNumber = '';
+            operator = '';
+            resultShown = false;
+            // Example: Result was "8", user clicks "5" → display shows "5"
+        }
+        else {
+            // Normal typing - just add number
+            display.value = display.value + buttonNumber;
+        }
     });
 });
+// Decimal button
+var decimalButton = document.querySelector(".decimal");
+decimalButton.addEventListener("click", function () {
+    // If result was just shown, start fresh with "0."
+    if (resultShown) {
+        display.value = '0.';
+        firstNumber = '';
+        operator = '';
+        resultShown = false;
+        return;
+    }
+    var currentNumber = '';
+    if (operator) {
+        var parts = display.value.split(operator);
+        currentNumber = parts[parts.length - 1].trim();
+    }
+    else {
+        currentNumber = display.value;
+    }
+    if (!currentNumber.includes('.')) {
+        display.value = display.value + '.';
+    }
+});
 // Symbol buttons
-// FIX 2: Added "as NodeListOf<HTMLButtonElement>" 
-// so TypeScript knows these are buttons!
-// FIX 3: Added "const clickedOperator = button.textContent || ''"
-// because clickedOperator was never defined!
 var symbolButtons = document.querySelectorAll(".symbol");
 symbolButtons.forEach(function (button) {
     button.addEventListener("click", function () {
-        // FIX 3: Define clickedOperator at the TOP of the handler
         var clickedOperator = button.textContent || '';
+        // NEW: If result was just shown, continue with that result!
+        // Example: Result was "8", user clicks "+" → continue with "8 +"
+        if (resultShown) {
+            resultShown = false;
+            // Don't reset firstNumber - keep the result as firstNumber
+            // Don't reset display - keep showing the result
+            // Just add the operator and continue!
+            firstNumber = display.value;
+            display.value = display.value + ' ' + clickedOperator + ' ';
+            operator = clickedOperator;
+            return;
+        }
         if (firstNumber && operator) {
-            // Calculate first, then show result + new operator
-            var result = operate(operator, Number(firstNumber), Number(display.value.split(operator)[1].trim()));
-            firstNumber = String(result);
+            var parts = display.value.split(operator);
+            var secondNumber = parts[1].trim();
+            if (!secondNumber) {
+                operator = clickedOperator;
+                display.value = firstNumber + ' ' + clickedOperator + ' ';
+                return;
+            }
+            var result = operate(operator, Number(firstNumber), Number(secondNumber));
+            firstNumber = String(parseFloat(Number(result).toFixed(4)));
             display.value = firstNumber + ' ' + clickedOperator + ' ';
         }
         else {
-            // First operator being clicked
             firstNumber = display.value;
             display.value = display.value + ' ' + clickedOperator + ' ';
         }
-        // Save which operator was clicked
         operator = clickedOperator;
     });
 });
 // Reset button
-// FIX 4: Added "as HTMLButtonElement"
-// so TypeScript knows this is a button!
 var clear = document.querySelector(".clear");
 clear.addEventListener("click", function () {
     display.value = '';
     firstNumber = '';
     operator = '';
+    resultShown = false;
+    // NEW: Reset resultShown when cleared
 });
 // Equals button
-var equals = document.querySelector(".result");
+var equals = document.querySelector(".equals");
 equals.addEventListener("click", function () {
     if (firstNumber && operator) {
         var parts = display.value.split(operator);
         var secondNumber = parts[1].trim();
         if (secondNumber) {
             var result = operate(operator, Number(firstNumber), Number(secondNumber));
-            display.value = String(result);
+            display.value = String(parseFloat(Number(result).toFixed(4)));
             firstNumber = '';
             operator = '';
+            resultShown = true;
+            // NEW: Tell the calculator a result was just shown!
         }
     }
 });
-// button.addEventListener("click", () => {
-// const a = Number(input1.value);
-// const b = Number(input2.value);
-//     result.value = add(a, b);
-//   });
-// document.body.appendChild(answerBox);
-// answerBox.appendChild(input1);
-// answerBox.appendChild(input2);
-// answerBox.appendChild(button);
-// answerBox.appendChild(result);
-// //Answer Box -> Playing around 
-// const answerBox = document.createElement('div');
-// answerBox.placeholder = 'Enter answer here';
-// answerBox.classList.add('box');
-// answerBox.style.width = '300px';
-// answerBox.style.height = '60px';
-// answerBox.style.border = '2px solid black';
-// answerBox.style.position = 'absolute';
-// answerBox.style.left = '50%';
-// answerBox.style.top = '7%';
-// answerBox.style.transform = 'translate(-50%, -50%)';
-// document.body.appendChild(answerBox);
-// //Establish Input Response
-// const input1 = document.createElement("input");
-// input1.type = "number";
-// input1.placeholder = "First number";
-// const input2 = document.createElement("input");
-// input2.type = "number";
-// input2.placeholder = "Second number";
-// const button = document.createElement("button");
-// button.textContent = "Add";
-// const result = document.createElement("input");
-// result.type = "text";
-// result.placeholder = "Result";
-// result.readOnly = true;
-// button.addEventListener("click", () => {
-//     const a = Number(input1.value);
-//     const b = Number(input2.value);
-//     result.value = add(a, b);
-//   });
-// document.body.appendChild(answerBox);
-// answerBox.appendChild(input1);
-// answerBox.appendChild(input2);
-// answerBox.appendChild(button);
-// answerBox.appendChild(result);
