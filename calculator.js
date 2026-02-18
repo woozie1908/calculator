@@ -32,9 +32,7 @@ var operate = function (operator, a, b) {
 //Global variables
 var firstNumber = '';
 var operator = '';
-var resultShown = false;
-// NEW: Tracks if a result was just displayed
-// true = result just shown, next number click starts fresh
+var resultShown = false; // true = result just shown, next number click starts fresh
 // false = normal typing mode
 //Display
 var display = document.querySelector("#display");
@@ -44,13 +42,11 @@ numberButtons.forEach(function (button) {
     button.addEventListener("click", function () {
         var buttonNumber = button.textContent || '';
         if (resultShown) {
-            // NEW: Result was just shown, start fresh!
             // Clear display and start new number
             display.value = buttonNumber;
             firstNumber = '';
             operator = '';
-            resultShown = false;
-            // Example: Result was "8", user clicks "5" → display shows "5"
+            resultShown = false; // Example: Result was "8", user clicks "5" → display shows "5"
         }
         else {
             // Normal typing - just add number
@@ -86,13 +82,9 @@ var symbolButtons = document.querySelectorAll(".symbol");
 symbolButtons.forEach(function (button) {
     button.addEventListener("click", function () {
         var clickedOperator = button.textContent || '';
-        // NEW: If result was just shown, continue with that result!
         // Example: Result was "8", user clicks "+" → continue with "8 +"
         if (resultShown) {
             resultShown = false;
-            // Don't reset firstNumber - keep the result as firstNumber
-            // Don't reset display - keep showing the result
-            // Just add the operator and continue!
             firstNumber = display.value;
             display.value = display.value + ' ' + clickedOperator + ' ';
             operator = clickedOperator;
@@ -124,7 +116,6 @@ clear.addEventListener("click", function () {
     firstNumber = '';
     operator = '';
     resultShown = false;
-    // NEW: Reset resultShown when cleared
 });
 // Equals button
 var equals = document.querySelector(".equals");
@@ -138,7 +129,25 @@ equals.addEventListener("click", function () {
             firstNumber = '';
             operator = '';
             resultShown = true;
-            // NEW: Tell the calculator a result was just shown!
+        }
+    }
+});
+var backspace = document.querySelector(".backspace");
+backspace.addEventListener("click", function () {
+    if (display.value.length > 0) {
+        var currentDisplay = display.value;
+        // Check if last 3 characters are " [operator] " (space-operator-space)
+        var lastThree = currentDisplay.slice(-3);
+        var operatorWithSpaces = [' + ', ' - ', ' x ', ' ÷ '];
+        if (operatorWithSpaces.includes(lastThree)) {
+            // Delete all 3 characters (space-operator-space)
+            display.value = currentDisplay.slice(0, -3);
+            operator = '';
+            firstNumber = '';
+        }
+        else {
+            // Just delete last character
+            display.value = currentDisplay.slice(0, -1);
         }
     }
 });

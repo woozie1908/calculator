@@ -34,9 +34,7 @@ const operate = function(operator: string, a: number, b: number) {
 //Global variables
 let firstNumber = '';
 let operator = '';
-let resultShown = false;
-// NEW: Tracks if a result was just displayed
-// true = result just shown, next number click starts fresh
+let resultShown = false; // true = result just shown, next number click starts fresh
 // false = normal typing mode
 
 //Display
@@ -49,13 +47,11 @@ numberButtons.forEach((button) => {
     const buttonNumber = button.textContent || '';
 
     if (resultShown) {
-      // NEW: Result was just shown, start fresh!
       // Clear display and start new number
       display.value = buttonNumber;
       firstNumber = '';
       operator = '';
-      resultShown = false;
-      // Example: Result was "8", user clicks "5" → display shows "5"
+      resultShown = false; // Example: Result was "8", user clicks "5" → display shows "5"
     } else {
       // Normal typing - just add number
       display.value = display.value + buttonNumber;
@@ -93,13 +89,9 @@ symbolButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const clickedOperator = button.textContent || '';
 
-    // NEW: If result was just shown, continue with that result!
     // Example: Result was "8", user clicks "+" → continue with "8 +"
     if (resultShown) {
       resultShown = false;
-      // Don't reset firstNumber - keep the result as firstNumber
-      // Don't reset display - keep showing the result
-      // Just add the operator and continue!
       firstNumber = display.value;
       display.value = display.value + ' ' + clickedOperator + ' ';
       operator = clickedOperator;
@@ -135,7 +127,6 @@ clear.addEventListener("click", () => {
   firstNumber = '';
   operator = '';
   resultShown = false;
-  // NEW: Reset resultShown when cleared
 });
 
 // Equals button
@@ -151,7 +142,28 @@ equals.addEventListener("click", () => {
       firstNumber = '';
       operator = '';
       resultShown = true;
-      // NEW: Tell the calculator a result was just shown!
+    }
+  }
+});
+
+
+const backspace = document.querySelector(".backspace") as HTMLButtonElement;
+backspace.addEventListener("click", () => {
+  if (display.value.length > 0) {
+    const currentDisplay = display.value;
+    
+    // Check if last 3 characters are " [operator] " (space-operator-space)
+    const lastThree = currentDisplay.slice(-3);
+    const operatorWithSpaces = [' + ', ' - ', ' x ', ' ÷ '];
+    
+    if (operatorWithSpaces.includes(lastThree)) {
+      // Delete all 3 characters (space-operator-space)
+      display.value = currentDisplay.slice(0, -3);
+      operator = '';
+      firstNumber = '';
+    } else {
+      // Just delete last character
+      display.value = currentDisplay.slice(0, -1);
     }
   }
 });
