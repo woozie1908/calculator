@@ -14,7 +14,10 @@ const multiply = function(a: number, b: number): number {
 };
 
 //Divide function
-const divide = function(a: number, b: number): number {
+const divide = function(a: number, b: number): number | string {
+  if (b === 0) {
+    return "Error";
+  }
   return a / b;
 };
 
@@ -29,6 +32,7 @@ const operate = function(operator: string, a: number, b: number) {
   } else if (operator === '÷') {
     return divide(a,b);
   }
+  return "Error";
 };
 
 //Global variables
