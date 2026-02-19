@@ -4,16 +4,16 @@
     font-size: xxx-large;
     margin-bottom: 10px;
 }
-
 #display {
     grid-column: 1 / -1;
     border: 1px solid black;
     padding: 10px;
     text-align: right;
-    width: 100%;  /* Take full grid width */
+    width: 100%;
     box-sizing: border-box;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     font-size: 32px;
+    overflow-x: auto;  /* Allows horizontal scrolling */
 }
 
 .calculatorbody {

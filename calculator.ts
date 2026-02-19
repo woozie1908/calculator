@@ -60,6 +60,8 @@ numberButtons.forEach((button) => {
       // Normal typing - just add number
       display.value = display.value + buttonNumber;
     }
+    // ADD THIS LINE - scrolls to show the end
+    display.scrollLeft = display.scrollWidth;
   });
 });
 
@@ -113,6 +115,15 @@ symbolButtons.forEach((button) => {
       }
 
       const result = operate(operator, Number(firstNumber), Number(secondNumber));
+
+      // ADD THIS CHECK:
+      if (result === "Error") {
+        display.value = "Error";
+        firstNumber = '';
+        operator = '';
+        return;
+  }
+
       firstNumber = String(parseFloat(Number(result).toFixed(4)));
       display.value = firstNumber + ' ' + clickedOperator + ' ';
     } else {
@@ -142,6 +153,15 @@ equals.addEventListener("click", () => {
 
     if (secondNumber) {
       const result = operate(operator, Number(firstNumber), Number(secondNumber));
+
+        // ADD THIS CHECK:
+  if (result === "Error") {
+    display.value = "Error";
+    firstNumber = '';
+    operator = '';
+    resultShown = true;
+    return;
+  }
       display.value = String(parseFloat(Number(result).toFixed(4)));
       firstNumber = '';
       operator = '';

@@ -12,6 +12,9 @@ var multiply = function (a, b) {
 };
 //Divide function
 var divide = function (a, b) {
+    if (b === 0) {
+        return "Error";
+    }
     return a / b;
 };
 //Operator function
@@ -28,6 +31,7 @@ var operate = function (operator, a, b) {
     else if (operator === '÷') {
         return divide(a, b);
     }
+    return "Error";
 };
 //Global variables
 var firstNumber = '';
@@ -52,6 +56,8 @@ numberButtons.forEach(function (button) {
             // Normal typing - just add number
             display.value = display.value + buttonNumber;
         }
+        // ADD THIS LINE - scrolls to show the end
+        display.scrollLeft = display.scrollWidth;
     });
 });
 // Decimal button
@@ -99,6 +105,13 @@ symbolButtons.forEach(function (button) {
                 return;
             }
             var result = operate(operator, Number(firstNumber), Number(secondNumber));
+            // ADD THIS CHECK:
+            if (result === "Error") {
+                display.value = "Error";
+                firstNumber = '';
+                operator = '';
+                return;
+            }
             firstNumber = String(parseFloat(Number(result).toFixed(4)));
             display.value = firstNumber + ' ' + clickedOperator + ' ';
         }
@@ -125,6 +138,14 @@ equals.addEventListener("click", function () {
         var secondNumber = parts[1].trim();
         if (secondNumber) {
             var result = operate(operator, Number(firstNumber), Number(secondNumber));
+            // ADD THIS CHECK:
+            if (result === "Error") {
+                display.value = "Error";
+                firstNumber = '';
+                operator = '';
+                resultShown = true;
+                return;
+            }
             display.value = String(parseFloat(Number(result).toFixed(4)));
             firstNumber = '';
             operator = '';
